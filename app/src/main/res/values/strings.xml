@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Button</string>
+    <string name="textview">TextView</string>
+    <string name="R">Repeat On</string>
+    <string name="ok">OK</string>
+    <string name="RepeatOn">Repeat set on :</string>
+    <string name="Cancel">Cancel</string>
+    <string name="clear">clear</string>
+    <string name="cleared">cleared</string>
+    <string name="settings">Settings</string>
+    <string-array name="Repeat">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+
+
+    </string-array>
+    <string-array name="Ringtones">
+        <item>RingTone 1</item>
+        <item>RingTone 2</item>
+        <item>RingTone 3</item>
+        <item>RingTone 4</item>
+
+
+
+    </string-array>
+</resources>
