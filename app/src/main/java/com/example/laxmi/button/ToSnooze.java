@@ -125,10 +125,12 @@ public class ToSnooze extends AppCompatActivity {
 
                 }
             }
+
         }
         else
         {
             Toast.makeText(getApplicationContext(),"No paired devices",Toast.LENGTH_LONG).show();
+            tocall();
         }
         //tocall();
 
@@ -153,7 +155,7 @@ public class ToSnooze extends AppCompatActivity {
         int k=forselected();
         Toast.makeText(ToSnooze.this,"inside tocall()",Toast.LENGTH_LONG).show();
 
-        Toast.makeText(getApplicationContext()," "+k,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext()," "+k,Toast.LENGTH_SHORT).show();
          mediaPlayer=MediaPlayer.create(getApplicationContext(),k);
         mediaPlayer.start();
         //n
@@ -215,7 +217,7 @@ public class ToSnooze extends AppCompatActivity {
        // ringtone.play();
         mediaPlayer.start();
         mediaPlayer.setLooping(true);
-        Toast.makeText(ToSnooze.this,"inside solve",Toast.LENGTH_LONG).show();
+       // Toast.makeText(ToSnooze.this,"inside solve",Toast.LENGTH_LONG).show();
 
 
 
@@ -228,9 +230,9 @@ public class ToSnooze extends AppCompatActivity {
 
 
         Random r1=new Random();
-        int n1=r1.nextInt(99-10)+10;
-        int n2=r1.nextInt(99-10)+10;
-        int n3=r1.nextInt(99-10)+10;
+        int n1=r1.nextInt(10-1)+1;
+        int n2=r1.nextInt(10-1)+1;
+        int n3=r1.nextInt(10-1)+1;
         String problem=Integer.toString(n1)+"*"+Integer.toString(n2)+"+"+Integer.toString(n3)+"=";
         int sum=n1*n2+n3;
 
@@ -403,11 +405,14 @@ public class ToSnooze extends AppCompatActivity {
            if(!ConnectSuccess)
            {
                Toast.makeText(ToSnooze.this,"Connection failed,sorry:(",Toast.LENGTH_LONG).show();
-               finish();
+               mybluetooth.disable();
+               btSocket=null;
+               tocall();
+               //finish();
            }
            else
            {
-               Toast.makeText(ToSnooze.this,"connected to"+HCname,Toast.LENGTH_LONG).show();
+               Toast.makeText(ToSnooze.this,"Connected to "+HCname,Toast.LENGTH_LONG).show();
                isBtConnected=true;
                tocall();
            }

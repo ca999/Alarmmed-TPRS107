@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -200,6 +202,18 @@ public class MainActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE,minute);
+                int h = new Time(System.currentTimeMillis()).getHours();
+                int m=new Time(System.currentTimeMillis()).getMinutes();
+                if(hour-h>=0)
+                    h=hour-h;
+                else
+                    h=h-hour+12;
+                if(m-minutes<0)
+                    m=minutes-m;
+                else
+                    m=m-minutes;
+                String hmi="alarm will ring in "+Integer.toString(h)+" hours and "+Integer.toString(m)+"minutes";
+                Toast.makeText(getApplicationContext(),hmi,Toast.LENGTH_LONG).show();
                // Toast.makeText(MainActivity.this,mytime.getCurrentHour()+" "+mytime.getCurrentMinute(),Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);
 
