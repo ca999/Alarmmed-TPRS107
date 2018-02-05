@@ -112,7 +112,7 @@ public class ToSnooze extends AppCompatActivity {
 
         if(pairedDevices.size()>0)
         {
-            Toast.makeText(this,"Getting paired devices",Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this,"Getting paired devices",Toast.LENGTH_LONG).show();
             for(BluetoothDevice bt:pairedDevices)
             {
                 String btname=bt.getName();

@@ -331,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
                 selected= ((AlertDialog)dialog).getListView().getCheckedItemPosition();
                Toast.makeText(MainActivity.this,"the ringtone selected is:"+selected,Toast.LENGTH_LONG).show();
                 //dialog.
+                //random typing cause i updated to the wrong branch XD
             }
         });
 
