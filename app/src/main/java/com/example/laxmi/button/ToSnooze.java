@@ -127,12 +127,15 @@ public class ToSnooze extends AppCompatActivity {
             }
 
         }
+
         else
         {
             Toast.makeText(getApplicationContext(),"No paired devices",Toast.LENGTH_LONG).show();
             tocall();
         }
         //tocall();
+        if(HCname.equals(""))
+            tocall();
 
     }
 

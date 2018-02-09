@@ -11,7 +11,7 @@
         android:id="@+id/custom_toolbar"></include>
 
 
-    <ListView
+  <!--  <ListView
         android:id="@+id/myListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,5 +23,21 @@
 
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="100dp" />
+        android:paddingTop="100dp" /> -->
+    <GridView
+        android:id="@+id/myListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+
+        android:layout_margin="10dp"
+        android:columnWidth="150dp"
+        android:gravity="center"
+
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:paddingTop="100dp"
+        android:verticalSpacing="150dp" />
+
 </android.widget.RelativeLayout>

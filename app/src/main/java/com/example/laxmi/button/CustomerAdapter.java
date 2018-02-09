@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomerAdapter extends ArrayAdapter<String> {
-    public CustomerAdapter(@NonNull Context context, String [] print) {
+    int img [];
+    public CustomerAdapter(@NonNull Context context, String [] print,int [] images) {
         super(context,R.layout.custom_row, print);
+        img=images;
     }
 
     @NonNull
@@ -21,8 +24,10 @@ public class CustomerAdapter extends ArrayAdapter<String> {
         LayoutInflater myLayoutInflater=LayoutInflater.from(getContext());
         View customView=myLayoutInflater.inflate(R.layout.custom_row,parent,false);
         String singleItem=getItem(position);
-        TextView mytext=(TextView)customView.findViewById(R.id.mytext);
+        TextView mytext=(TextView)customView.findViewById(R.id.textview);//mytext-textview
+        ImageView im=(ImageView)customView.findViewById(R.id.imageview);//n
         mytext.setText(singleItem);
+        im.setImageResource(img[position]);
         return customView;
 
 

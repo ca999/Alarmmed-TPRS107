@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -102,12 +103,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
-        String print[]={  "     Time","     Repeat","     Ringtone","     How to turn the alarm off"};
-        ListAdapter myAdapter=new CustomerAdapter(this,print);
+       // String print[]={  "     Time","     Repeat","     Ringtone","     How to turn the alarm off"};
+        String print[]={  "Time","Repeat","Ringtone","Turn Off Method"};
+        int images[]={R.drawable.clock21,R.drawable.r,R.drawable.ringtone,R.drawable.math};//n
+        //int images[]={};
+      // int images[]={R.mipmap.clock21,R.drawable.r,R.drawable.ringtone,R.drawable.math};
+       /* ListAdapter myAdapter=new CustomerAdapter(this,print);
         
 
 
-        ListView myListView=(ListView)findViewById(R.id.myListView);
+        ListView myListView=(ListView)findViewById(R.id.myListView);*/
+        GridView myListView=(GridView)findViewById(R.id.myListView);
+        CustomerAdapter myAdapter=new CustomerAdapter(this,print,images);//n
+
 
         myListView.setAdapter(myAdapter);
         myListView.setOnItemClickListener(

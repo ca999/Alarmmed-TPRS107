@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp"
 
-    <TextView
+    >
+
+    <!--  <TextView
         android:id="@+id/mytext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -17,5 +21,29 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@android:color/background_light"
         android:textSize="20sp"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded" /> -->
+    <ImageView
+        android:id="@+id/imageview"
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+
+        />
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="#fffdfd"
+        android:textStyle="bold"
+
+        /> <!--neww-->
+
+
 </LinearLayout>
