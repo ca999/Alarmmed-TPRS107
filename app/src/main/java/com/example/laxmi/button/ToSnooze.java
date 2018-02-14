@@ -156,7 +156,7 @@ public class ToSnooze extends AppCompatActivity {
       //  Toast.makeText(this,"tocall",Toast.LENGTH_LONG).show();
       //  Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         int k=forselected();
-        Toast.makeText(ToSnooze.this,"inside tocall()",Toast.LENGTH_LONG).show();
+        //Toast.makeText(ToSnooze.this,"inside tocall()",Toast.LENGTH_LONG).show();
 
         //Toast.makeText(getApplicationContext()," "+k,Toast.LENGTH_SHORT).show();
          mediaPlayer=MediaPlayer.create(getApplicationContext(),k);

@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(h>=12&&h<=15)
         {
-            lay.setBackground(getResources().getDrawable(R.mipmap.noon));
-            toolbar.setBackground(getResources().getDrawable(R.mipmap.noon2));
+            lay.setBackground(getResources().getDrawable(R.mipmap.mor));
+            toolbar.setBackground(getResources().getDrawable(R.mipmap.mor2));
         }
         else if(h>=16&&h<=17)
         {
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
        // String print[]={  "     Time","     Repeat","     Ringtone","     How to turn the alarm off"};
         String print[]={  "Time","Repeat","Ringtone","Turn Off Method"};
-        int images[]={R.drawable.clock21,R.drawable.r,R.drawable.ringtone,R.drawable.math};//n
+        int images[]={R.drawable.clocks,R.drawable.repeat,R.drawable.ring1,R.drawable.maths};//n
         //int images[]={};
       // int images[]={R.mipmap.clock21,R.drawable.r,R.drawable.ringtone,R.drawable.math};
        /* ListAdapter myAdapter=new CustomerAdapter(this,print);
@@ -205,22 +205,61 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,diaplay,Toast.LENGTH_LONG).show();
 
             long time;
-            if(Build.VERSION.SDK_INT < 23)
+            if(Build.VERSION.SDK_INT < 23||Build.VERSION.SDK_INT>=23)
             {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE,minute);
                 int h = new Time(System.currentTimeMillis()).getHours();
                 int m=new Time(System.currentTimeMillis()).getMinutes();
-                if(hour-h>=0)
-                    h=hour-h;
-                else
-                    h=h-hour+12;
-                if(m-minutes<0)
-                    m=minutes-m;
-                else
-                    m=m-minutes;
-                String hmi="alarm will ring in "+Integer.toString(h)+" hours and "+Integer.toString(m)+"minutes";
+               // Toast.makeText(getApplicationContext(),""+h+"  "+m+"  "+hour,Toast.LENGTH_LONG).show();
+                if(hour==h)
+                    h=0;
+                else if(h==0&&hour<=12)
+                    h=hour;
+                else if(h==0&&hour>12)
+                    h=12+hour;
+                else if(hour==0&&h>12)
+                    h=24-h;
+                else if(hour==0&&h<12)
+                    h=24-h;
+                 else if(hour-12==h||h-12==hour)
+                      h=12;
+                else if(h>=12&&hour<12)
+                     h=24-h+hour;
+                else if(h<12&&hour>12)
+                    h=12-h+hour;
+                else if(h>12&&hour>12)
+                {
+                    if(hour>h)
+                        h=hour-h;
+                    else
+                        h=24-hour;
+                }
+                else if(h<12&&hour<12)
+                {
+                    if(hour>h)
+                        h=hour-h;
+                    else
+                        h=24-hour;
+                }
+
+
+
+                m=60-m+minutes;
+                if(m>60)
+                {
+                   // h++;
+                    m=m-60;
+                }
+                else if(m<60)
+                {
+                    h--;
+
+                }
+                else if(m==60)
+                    m=0;
+                String hmi="alarm will ring in "+Integer.toString(h)+" hours and "+Integer.toString(m)+" minutes";
                 Toast.makeText(getApplicationContext(),hmi,Toast.LENGTH_LONG).show();
                // Toast.makeText(MainActivity.this,mytime.getCurrentHour()+" "+mytime.getCurrentMinute(),Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);
@@ -328,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
         mybuilder.setSingleChoiceItems(ringtoneitems, check[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this," "+which,Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this," "+which,Toast.LENGTH_SHORT).show();
                 //final MediaPlayer mediaPlayer=MediaPlayer.create(getApplicationContext(),arr[which]);
               //  mediaPlayer.start();
               //  for(int j=0;j<90000000;j++);
@@ -351,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 selected= ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-               Toast.makeText(MainActivity.this,"the ringtone selected is:"+selected,Toast.LENGTH_LONG).show();
+               Toast.makeText(MainActivity.this,"the ringtone selected is:"+selected+1,Toast.LENGTH_LONG).show();
                 //dialog.
                 //random typing cause i updated to the wrong branch XD
             }
