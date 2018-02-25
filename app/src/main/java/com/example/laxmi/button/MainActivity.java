@@ -1,12 +1,16 @@
 package com.example.laxmi.button;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -29,8 +33,13 @@ import android.widget.Toast;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Handler;
+
+import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity {
     static final int DIALOG_ID=0;
@@ -43,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> userItem=new ArrayList<>();
     String ringtoneitems[];
     static int selected=0;
+    String title[];
+    Uri address[];
+    MediaPlayer mediaPlayer;
+    static Uri ringadd;
+    static Uri tonePath;
 
     //ArrayList<Integer> ringItem=new ArrayList<>();
 
@@ -354,6 +368,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK && requestCode == 3){
+            Uri toneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            //RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_NOTIFICATION, toneUri);
+            if(toneUri!=null){
+                tonePath = toneUri;
+                //Log.i("tonepath", tonePath);
+            }
+        }
+    }
+
     public  void RingTone()
     {
         final int[] check = {0};
@@ -366,31 +395,33 @@ public class MainActivity extends AppCompatActivity {
         mybuilder.setTitle("RingTones");
         mybuilder.setSingleChoiceItems(ringtoneitems, check[0], new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-               // Toast.makeText(MainActivity.this," "+which,Toast.LENGTH_SHORT).show();
-                //final MediaPlayer mediaPlayer=MediaPlayer.create(getApplicationContext(),arr[which]);
-              //  mediaPlayer.start();
-              //  for(int j=0;j<90000000;j++);
-               // if(mediaPlayer.)
+            public void onClick(DialogInterface dialog, int which)
+            {
+              if(which==4)
+              {
+                  Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                  intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+                  intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "CHOOSE NOTIFICATION SOUND");
+                  intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri)null);
+                  startActivityForResult(intent, 3);
 
-               // mediaPlayer.stop();
 
 
 
-               // check[0]=((AlertDialog)dialog).getListView().getCheckedItemPosition();
-               // Toast.makeText(MainActivity.this,"the ringtoneeee selected is:"+check[0],Toast.LENGTH_LONG).show();
+              }
 
 
 
 
             }
         });
+
         mybuilder.setCancelable(false);
         mybuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 selected= ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-               Toast.makeText(MainActivity.this,"the ringtone selected is:"+selected+1,Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this,"the ringtone selected is: "+selected+1,Toast.LENGTH_LONG).show();
                 //dialog.
                 //random typing cause i updated to the wrong branch XD
             }
@@ -420,12 +451,99 @@ public class MainActivity extends AppCompatActivity {
             return R.raw.ring2;
         else if(selected==2)
             return R.raw.ring3;
-        else
+        else if(selected==3)
             return R.raw.ring;
+        else
+            return -999;
 
 
 
     }
+    public static Uri ringi()
+    {
+        return tonePath ;
+    }
+   /* public void phoneringtone()
+    {
+        Toast.makeText(getApplicationContext(),"2",Toast.LENGTH_LONG).show();
+        getNotifications();
+        AlertDialog.Builder mybuilder4 = new AlertDialog.Builder(MainActivity.this);
+        mybuilder4.setTitle("Phone Ringtones");
+        int[] check = {1};
+        mybuilder4.setSingleChoiceItems(title, check[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer = null;
+                }
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), address[which]);
+                //Toast.makeText(MainActivity.this,""+address[which],Toast.LENGTH_LONG).show();
+                //Ringtone r=
+
+                mediaPlayer.start();
+
+
+            }
+        });
+        mybuilder4.setCancelable(false);
+        mybuilder4.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mediaPlayer.stop();
+                ringadd=address[which];
+
+            }
+        });
+        mybuilder4.setNegativeButton("Cancel :(", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                mediaPlayer.stop();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog mDia = mybuilder4.create();
+        mDia.show();
+
+
+    }*/
+   /* public void getNotifications()
+    {
+        Toast.makeText(getApplicationContext(),"1",Toast.LENGTH_LONG).show();
+        RingtoneManager manager = new RingtoneManager(getApplicationContext());
+        manager.setType(RingtoneManager.TYPE_RINGTONE);
+        Cursor cursor = manager.getCursor();
+
+        Map<String, Uri> list = new HashMap<>();
+        while (cursor.moveToNext()) {
+            String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+            String notificationUri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
+            Uri uri = Uri.parse(notificationUri + "/" + cursor.getString(RingtoneManager.ID_COLUMN_INDEX));
+
+            list.put(notificationTitle, uri);
+        }
+        title=new String[list.size()];
+        address=new Uri[list.size()];
+
+
+        int i=0;
+        for(Map.Entry<String,Uri>entry:list.entrySet())
+        {
+            if(i<list.size())
+            {
+                title[i]=entry.getKey();
+                address[i]=entry.getValue();
+                i++;
+            }
+
+        }
+        String s= Arrays.toString(address);
+        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+
+
+    }*/
+
 
 
 }

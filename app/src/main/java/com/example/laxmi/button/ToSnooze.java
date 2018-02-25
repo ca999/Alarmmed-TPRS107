@@ -24,20 +24,14 @@ import java.util.Set;
 import java.util.UUID;
 
 import static com.example.laxmi.button.MainActivity.forselected;
+import static com.example.laxmi.button.MainActivity.ringi;
 
 public class ToSnooze extends AppCompatActivity {
 
     Ringtone ringtone;
     MediaPlayer mediaPlayer;
     String time;
-   /* private boolean isBTConnected=false;//n
-    private BluetoothAdapter mybluetooth=null;//n
-    private Set<BluetoothDevice> pairedDevices;//n
-    String HCname="";//n
-    String HCaddress="";//n
-    private ProgressDialog progress;//n
-    BluetoothSocket btSocket=null;//n
-    static final UUID myUUID=UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//n*/
+
    private boolean isBtConnected = false;
 
     private BluetoothAdapter mybluetooth=null;
@@ -53,44 +47,7 @@ public class ToSnooze extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_to_snooze);
-      /*  mybluetooth=BluetoothAdapter.getDefaultAdapter();//n
-        if(mybluetooth==null)//n
-        {
-            Toast.makeText(getApplicationContext(),"You dont have bluetooth :o",Toast.LENGTH_LONG).show();
-            finish();
-        }
-        else if(!mybluetooth.isEnabled())//n
-        {
-            mybluetooth.enable();
-            Toast.makeText(getApplicationContext(),"Bluetooth enabled",Toast.LENGTH_LONG).show();
-        }
-       // for(long i=0;i<1000000000;i++)//n
-        {
-            //for some reason to get the bonded devices a delay is required,this loop is to provide that delay xD
-        }
-        pairedDevices=mybluetooth.getBondedDevices();//n
 
-        if(pairedDevices.size()>0)//n
-        {
-            Toast.makeText(ToSnooze.this,"Getting paired Devices",Toast.LENGTH_LONG).show();
-            for(BluetoothDevice bt:pairedDevices)
-            {
-                String btname=bt.getName();
-                String btadd=bt.getAddress();
-                if(btname.equals("HC-05"))
-                {
-                    HCname=btname;
-                    HCaddress=btadd;
-                    onBluetooth();
-
-                }
-            }
-        }
-        else//n
-        {
-            Toast.makeText(getApplicationContext(),"No Paired Devices :(",Toast.LENGTH_LONG).show();
-        }*/
         mybluetooth=BluetoothAdapter.getDefaultAdapter();//get the default bluetooth adapter in the device
         if(mybluetooth==null)//check if the device has a bluetooth service
         {
@@ -139,12 +96,7 @@ public class ToSnooze extends AppCompatActivity {
 
     }
 
-   /* private void onBluetooth()//n
-    {
-        Toast.makeText(ToSnooze.this,"inside onbluetooth",Toast.LENGTH_LONG).show();
-        Toast.makeText(ToSnooze.this,HCaddress,Toast.LENGTH_LONG).show();
-        new ConnectBT().execute();
-    }*/
+
    private void onBluetooth()
    {
        Toast.makeText(this,HCaddress,Toast.LENGTH_LONG).show();
@@ -153,26 +105,23 @@ public class ToSnooze extends AppCompatActivity {
 
     public void tocall()
     {
-      //  Toast.makeText(this,"tocall",Toast.LENGTH_LONG).show();
-      //  Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        int k=forselected();
-        //Toast.makeText(ToSnooze.this,"inside tocall()",Toast.LENGTH_LONG).show();
 
-        //Toast.makeText(getApplicationContext()," "+k,Toast.LENGTH_SHORT).show();
-         mediaPlayer=MediaPlayer.create(getApplicationContext(),k);
-        mediaPlayer.start();
-        //n
-       /* if(btSocket!=null)//n
+        int k=forselected();
+
+        if(k==-999)//n
         {
-            try
-            {
-                btSocket.getOutputStream().write("TO".toString().getBytes());
-            }
-            catch (IOException e)
-            {
-                Toast.makeText(ToSnooze.this,"error",Toast.LENGTH_LONG).show();
-            }
-        }*/
+            Uri ring = ringi();
+            mediaPlayer=MediaPlayer.create(getApplicationContext(),ring);
+            mediaPlayer.start();
+        }
+        else//n
+        {
+            int ring=k;
+            mediaPlayer=MediaPlayer.create(getApplicationContext(),k);
+            mediaPlayer.start();
+        }
+
+
         if(btSocket!=null)
         {
             try
@@ -203,12 +152,7 @@ public class ToSnooze extends AppCompatActivity {
 
         time=Integer.valueOf(hour)+":"+minstr+" "+amppm;
 
-       /* if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        ringtone = RingtoneManager.getRingtone(this, alarmUri);
-        ringtone.stop();*/
-      // mediaPlayer.prepare();
+
        mediaPlayer.pause();
         solve();
     }
@@ -216,11 +160,10 @@ public class ToSnooze extends AppCompatActivity {
     private void solve()
     {
 
-        //Toast.makeText(this,"solve",Toast.LENGTH_LONG).show();
-       // ringtone.play();
+
         mediaPlayer.start();
         mediaPlayer.setLooping(true);
-       // Toast.makeText(ToSnooze.this,"inside solve",Toast.LENGTH_LONG).show();
+
 
 
 
@@ -260,17 +203,7 @@ public class ToSnooze extends AppCompatActivity {
                 {
                     //ringtone.stop();
                     mediaPlayer.stop();
-                   /* if(btSocket!=null)//n
-                    {
-                        try
-                        {
-                            btSocket.getOutputStream().write("TF".toString().getBytes());
-                        }
-                        catch (IOException e)
-                        {
-                            Toast.makeText(ToSnooze.this,"error",Toast.LENGTH_LONG).show();
-                        }
-                    }*/
+
                     if(btSocket!=null)
                     {
                         try
@@ -306,66 +239,7 @@ public class ToSnooze extends AppCompatActivity {
         });
     }
 
-   /* private class ConnectBT extends AsyncTask<Void,Void,Void>//n
-    {
 
-
-        private boolean ConnectSucces=true;
-
-        @Override
-        protected void onPreExecute()
-        {
-            //super.onPreExecute();
-            progress=ProgressDialog.show(ToSnooze.this,"Connecting","Get Ready To Be Alramed xD");
-            Toast.makeText(ToSnooze.this,"inside Onpreexceture",Toast.LENGTH_LONG).show();
-
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... devices)
-        {
-            Toast.makeText(ToSnooze.this,"inside doInBackGround",Toast.LENGTH_LONG).show();
-
-            try
-            {
-                if(btSocket==null||!isBTConnected)
-                {
-                    mybluetooth=BluetoothAdapter.getDefaultAdapter();
-                    BluetoothDevice dispositivo=mybluetooth.getRemoteDevice(HCaddress);
-                    btSocket=dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();
-
-                }
-            }
-            catch (IOException e)
-            {
-                ConnectSucces=false;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            Toast.makeText(ToSnooze.this,"inside POSTEXCETUTE",Toast.LENGTH_LONG).show();
-
-            super.onPostExecute(aVoid);
-            if(!ConnectSucces)
-            {
-                Toast.makeText(ToSnooze.this,"Connection failed,sorry :'(",Toast.LENGTH_LONG).show();
-                finish();
-            }
-            else
-            {
-                Toast.makeText(ToSnooze.this,"Connected to"+HCname,Toast.LENGTH_LONG).show();
-                isBTConnected=true;
-                tocall() ; //n
-            }
-            progress.dismiss();
-        }
-    }*/
    private class ConnectBT extends AsyncTask<Void,Void,Void>//this class basically switches on the required bluetooth module
    {
        private boolean ConnectSuccess=true;
