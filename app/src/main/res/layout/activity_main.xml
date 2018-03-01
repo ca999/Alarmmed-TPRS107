@@ -27,17 +27,39 @@
     <GridView
         android:id="@+id/myListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
 
-        android:layout_margin="10dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="10dp"
+
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:columnWidth="150dp"
         android:gravity="center"
-
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:paddingTop="100dp"
         android:verticalSpacing="150dp" />
+
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/myListView"
+        android:layout_marginStart="46dp"
+        android:onClick="okayset"
+        android:text="OK SET" />
+
+    <Button
+        android:id="@+id/Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/myListView"
+        android:layout_alignTop="@+id/ok"
+        android:layout_marginEnd="48dp"
+        android:onClick="cancel"
+        android:text="Cancel" />
 
 </android.widget.RelativeLayout>

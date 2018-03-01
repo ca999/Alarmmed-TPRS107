@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,12 +17,14 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -35,11 +38,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Handler;
 
 import static android.R.attr.data;
+import static android.R.attr.timePickerDialogTheme;
 
 public class MainActivity extends AppCompatActivity {
     static final int DIALOG_ID=0;
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     PendingIntent pendingIntent;
     String listitem[];
     boolean checkedItems[];
-    ArrayList<Integer> userItem=new ArrayList<>();
+     ArrayList<Integer> userItem=new ArrayList<>();
     String ringtoneitems[];
     static int selected=0;
     String title[];
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     static Uri ringadd;
     static Uri tonePath;
+     long time;
 
     //ArrayList<Integer> ringItem=new ArrayList<>();
 
@@ -120,13 +126,7 @@ public class MainActivity extends AppCompatActivity {
        // String print[]={  "     Time","     Repeat","     Ringtone","     How to turn the alarm off"};
         String print[]={  "Time","Repeat","Ringtone","Turn Off Method"};
         int images[]={R.drawable.clocks,R.drawable.repeat,R.drawable.ring1,R.drawable.maths};//n
-        //int images[]={};
-      // int images[]={R.mipmap.clock21,R.drawable.r,R.drawable.ringtone,R.drawable.math};
-       /* ListAdapter myAdapter=new CustomerAdapter(this,print);
-        
 
-
-        ListView myListView=(ListView)findViewById(R.id.myListView);*/
         GridView myListView=(GridView)findViewById(R.id.myListView);
         CustomerAdapter myAdapter=new CustomerAdapter(this,print,images);//n
 
@@ -155,6 +155,11 @@ public class MainActivity extends AppCompatActivity {
                           {
                               RingTone();
                           }
+                          break;
+
+                          case 3:
+                             // okayset();
+
 
 
                       }
@@ -189,120 +194,110 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected Dialog onCreateDialog(int id) {
         if(id==DIALOG_ID)
-            return new TimePickerDialog(MainActivity.this,timePickerListerner,hour,minute,false);
+            return new TimePickerDialog(MainActivity.this, timePickerListerner,hour,minute,false);
         return null;
     }
 
     protected TimePickerDialog.OnTimeSetListener timePickerListerner=new TimePickerDialog.OnTimeSetListener() {
+
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minutes) {
-            hour=hourOfDay;
-            int duph=hour;
-            minute=minutes;
-            int dupm=minute;
-            String amppm="";
-            String minstr="";
-            if(hour>12)
-            {
-                amppm="PM";
-                duph=duph-12;
-            }
+            hour = hourOfDay;
+            int duph = hour;
+            minute = minutes;
+            int dupm = minute;
+            String amppm = "";
+            String minstr = "";
+            if (hour > 12) {
+                amppm = "PM";
+                duph = duph - 12;
+            } else
+                amppm = "AM";
+            if (minute < 10)
+                minstr = "0" + Integer.valueOf(dupm);
             else
-                amppm="AM";
-            if(minute<10)
-                minstr="0"+Integer.valueOf(dupm);
-            else
-                minstr=Integer.valueOf(dupm)+"";
-            String diaplay="Alarm set to :"+Integer.valueOf(duph)+":"+minstr+" "+amppm;
+                minstr = Integer.valueOf(dupm) + "";
+            String diaplay = "Alarm set to :" + Integer.valueOf(duph) + ":" + minstr + " " + amppm;
 
 
-            Toast.makeText(MainActivity.this,diaplay,Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, diaplay, Toast.LENGTH_LONG).show();
 
-            long time;
-            if(Build.VERSION.SDK_INT < 23||Build.VERSION.SDK_INT>=23)
-            {
+            // long time;//lc
+            if (Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 23) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE,minute);
+                calendar.set(Calendar.MINUTE, minute);
                 int h = new Time(System.currentTimeMillis()).getHours();
-                int m=new Time(System.currentTimeMillis()).getMinutes();
-               // Toast.makeText(getApplicationContext(),""+h+"  "+m+"  "+hour,Toast.LENGTH_LONG).show();
-                if(hour==h)
-                    h=0;
-                else if(h==0&&hour<=12)
-                    h=hour;
-                else if(h==0&&hour>12)
-                    h=12+hour;
-                else if(hour==0&&h>12)
-                    h=24-h;
-                else if(hour==0&&h<12)
-                    h=24-h;
-                 else if(hour-12==h||h-12==hour)
-                      h=12;
-                else if(h>=12&&hour<12)
-                     h=24-h+hour;
-                else if(h<12&&hour>12)
-                    h=12-h+hour;
-                else if(h>12&&hour>12)
-                {
-                    if(hour>h)
-                        h=hour-h;
+                int m = new Time(System.currentTimeMillis()).getMinutes();
+                // Toast.makeText(getApplicationContext(),""+h+"  "+m+"  "+hour,Toast.LENGTH_LONG).show();
+                if (hour == h)
+                    h = 0;
+                else if (h == 0 && hour <= 12)
+                    h = hour;
+                else if (h == 0 && hour > 12)
+                    h = 12 + hour;
+                else if (hour == 0 && h > 12)
+                    h = 24 - h;
+                else if (hour == 0 && h < 12)
+                    h = 24 - h;
+                else if (hour - 12 == h || h - 12 == hour)
+                    h = 12;
+                else if (h >= 12 && hour < 12)
+                    h = 24 - h + hour;
+                else if (h < 12 && hour > 12)
+                    h = 12 - h + hour;
+                else if (h > 12 && hour > 12) {
+                    if (hour > h)
+                        h = hour - h;
                     else
-                        h=24-hour;
-                }
-                else if(h<12&&hour<12)
-                {
-                    if(hour>h)
-                        h=hour-h;
+                        h = 24 - hour;
+                } else if (h < 12 && hour < 12) {
+                    if (hour > h)
+                        h = hour - h;
                     else
-                        h=24-hour;
+                        h = 24 - hour;
                 }
 
 
-
-                m=60-m+minutes;
-                if(m>60)
-                {
-                   // h++;
-                    m=m-60;
-                }
-                else if(m<60)
-                {
+                m = 60 - m + minutes;
+                if (m > 60) {
+                    // h++;
+                    m = m - 60;
+                } else if (m < 60) {
                     h--;
 
-                }
-                else if(m==60)
-                    m=0;
-                String hmi="alarm will ring in "+Integer.toString(h)+" hours and "+Integer.toString(m)+" minutes";
-                Toast.makeText(getApplicationContext(),hmi,Toast.LENGTH_LONG).show();
-               // Toast.makeText(MainActivity.this,mytime.getCurrentHour()+" "+mytime.getCurrentMinute(),Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);
+                } else if (m == 60)
+                    m = 0;
+                String hmi = "alarm will ring in " + Integer.toString(h) + " hours and " + Integer.toString(m) + " minutes";
+                Toast.makeText(getApplicationContext(), hmi, Toast.LENGTH_LONG).show();
 
-                pendingIntent=PendingIntent.getBroadcast(MainActivity.this,0,intent,0);
-                time=(calendar.getTimeInMillis()-(calendar.getTimeInMillis()%60000));
-                if(System.currentTimeMillis()>time)
-                {
-                    if(Calendar.AM_PM ==0)
-                        time = time + (1000*60*60*12);
+                //Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);//lcccc
+
+                //pendingIntent=PendingIntent.getBroadcast(MainActivity.this,0,intent,0);//lccc
+                time = (calendar.getTimeInMillis() - (calendar.getTimeInMillis() % 60000));
+                if (System.currentTimeMillis() > time) {
+                    if (Calendar.AM_PM == 0)
+                        time = time + (1000 * 60 * 60 * 12);
                     else
-                        time = time + (1000*60*60*24);
+                        time = time + (1000 * 60 * 60 * 24);
                 }
-               // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time,/*7*24*60*60**/10000,pendingIntent);
-                //alarmManager.setExact(AlarmManager.RTC_WAKEUP,time,/*7*24*60*60**/10000,pendingIntent);
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP,time,pendingIntent);
-               // for(int i=0;i<60000000;i++){}
 
-              //  alarmManager.cancel(pendingIntent);
+                /// alarmManager.setExact(AlarmManager.RTC_WAKEUP,time,pendingIntent);//lccc
+                // for(int i=0;i<60000000;i++){}
+
+                //  alarmManager.cancel(pendingIntent);
 
 
             }
-
-
-
 
 
         }
     };
+
+
+
+
+
 
     public void RepeatSelect()
     {
@@ -463,86 +458,38 @@ public class MainActivity extends AppCompatActivity {
     {
         return tonePath ;
     }
-   /* public void phoneringtone()
+
+    public void okayset(View view)
     {
-        Toast.makeText(getApplicationContext(),"2",Toast.LENGTH_LONG).show();
-        getNotifications();
-        AlertDialog.Builder mybuilder4 = new AlertDialog.Builder(MainActivity.this);
-        mybuilder4.setTitle("Phone Ringtones");
-        int[] check = {1};
-        mybuilder4.setSingleChoiceItems(title, check[0], new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    mediaPlayer.stop();
-                    mediaPlayer = null;
-                }
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), address[which]);
-                //Toast.makeText(MainActivity.this,""+address[which],Toast.LENGTH_LONG).show();
-                //Ringtone r=
-
-                mediaPlayer.start();
-
-
-            }
-        });
-        mybuilder4.setCancelable(false);
-        mybuilder4.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mediaPlayer.stop();
-                ringadd=address[which];
-
-            }
-        });
-        mybuilder4.setNegativeButton("Cancel :(", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                mediaPlayer.stop();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog mDia = mybuilder4.create();
-        mDia.show();
-
-
-    }*/
-   /* public void getNotifications()
-    {
-        Toast.makeText(getApplicationContext(),"1",Toast.LENGTH_LONG).show();
-        RingtoneManager manager = new RingtoneManager(getApplicationContext());
-        manager.setType(RingtoneManager.TYPE_RINGTONE);
-        Cursor cursor = manager.getCursor();
-
-        Map<String, Uri> list = new HashMap<>();
-        while (cursor.moveToNext()) {
-            String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-            String notificationUri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
-            Uri uri = Uri.parse(notificationUri + "/" + cursor.getString(RingtoneManager.ID_COLUMN_INDEX));
-
-            list.put(notificationTitle, uri);
-        }
-        title=new String[list.size()];
-        address=new Uri[list.size()];
-
-
-        int i=0;
-        for(Map.Entry<String,Uri>entry:list.entrySet())
+        //Button ok=(Button)findViewById(R.id.ok);
+        Toast.makeText(MainActivity.this,String.valueOf(time),Toast.LENGTH_LONG).show();
+        if(userItem.size()==0)
         {
-            if(i<list.size())
-            {
-                title[i]=entry.getKey();
-                address[i]=entry.getValue();
-                i++;
-            }
-
+            Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);
+            pendingIntent=PendingIntent.getBroadcast(MainActivity.this,0,intent,0);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,time,pendingIntent);
         }
-        String s= Arrays.toString(address);
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+        else
+        {
+            Intent intent=new Intent(MainActivity.this,AlarmReceiver.class);
+            pendingIntent=PendingIntent.getBroadcast(MainActivity.this,0,intent,0);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        }
+
+    }
 
 
-    }*/
+
+
+
+
+    public void cancel(View view)
+    {
+        //Button cancel=(Button)findViewById(R.id.Cancel);
+        alarmManager.cancel(pendingIntent);
+    }
+
+
 
 
 
